@@ -21,6 +21,7 @@ const adminSecret = import.meta.env.VITE_ADMIN_SECRET || "admin123";
 // Form schemas
 const projectFormSchema = insertProjectSchema.extend({
   images: z.array(z.string().url()).min(1, "At least one image is required"),
+  description: z.string().min(1, "Project description is required"),
 });
 
 const resumeFormSchema = z.object({
@@ -54,6 +55,7 @@ export default function AdminPanel() {
     resolver: zodResolver(projectFormSchema),
     defaultValues: {
       title: "",
+      description: "",
       markdown: "",
       images: [""],
     },
@@ -174,6 +176,7 @@ export default function AdminPanel() {
   const handleEditProject = (project: Project) => {
     setEditingProject(project);
     projectForm.setValue("title", project.title);
+    projectForm.setValue("description", project.description || "");
     projectForm.setValue("markdown", project.markdown);
     projectForm.setValue("images", project.images);
     setImageInputs(project.images.length > 0 ? project.images : [""]);
@@ -220,7 +223,8 @@ export default function AdminPanel() {
     const validImages = formData.images.filter(img => img.trim() !== "");
     return {
       title: formData.title || "Untitled Project",
-      markdown: formData.markdown || "No description provided.",
+      description: formData.description || "No description provided.",
+      markdown: formData.markdown || "No content provided.",
       images: validImages.length > 0 ? validImages : ["https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=450"],
     };
   };
@@ -266,6 +270,21 @@ export default function AdminPanel() {
                       {projectForm.formState.errors.title && (
                         <p className="text-sm text-red-600 mt-1">
                           {projectForm.formState.errors.title.message}
+                        </p>
+                      )}
+                    </div>
+
+                    <div>
+                      <Label htmlFor="description">Project Description</Label>
+                      <Textarea
+                        id="description"
+                        {...projectForm.register("description")}
+                        rows={2}
+                        placeholder="Brief description of your project (appears below the title)"
+                      />
+                      {projectForm.formState.errors.description && (
+                        <p className="text-sm text-red-600 mt-1">
+                          {projectForm.formState.errors.description.message}
                         </p>
                       )}
                     </div>
@@ -421,7 +440,8 @@ Describe your project here...
                             
                             {/* Preview Content */}
                             <div>
-                              <h2 className="text-2xl font-bold text-slate-900 mb-4">{getPreviewData().title}</h2>
+                              <h2 className="text-2xl font-bold text-slate-900 mb-2">{getPreviewData().title}</h2>
+                              <p className="text-lg text-slate-600 mb-6 leading-relaxed">{getPreviewData().description}</p>
                               <div className="prose prose-slate max-w-none">
                                 <ReactMarkdown
                                   components={{

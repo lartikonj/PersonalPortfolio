@@ -19,3 +19,14 @@ export function extractFirstParagraph(markdown: string, maxLength = 150) {
   const text = firstParagraph?.trim() || "No description available";
   return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
 }
+
+export function getProjectDescription(project: { description?: string; markdown: string }, maxLength = 150) {
+  // Use project description if available, otherwise extract from markdown
+  if (project.description && project.description.trim()) {
+    return project.description.length > maxLength 
+      ? project.description.substring(0, maxLength) + "..." 
+      : project.description;
+  }
+  
+  return extractFirstParagraph(project.markdown, maxLength);
+}

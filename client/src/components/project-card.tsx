@@ -9,9 +9,16 @@ export function ProjectCard({ project }: ProjectCardProps) {
   // Extract first image for thumbnail
   const thumbnailImage = project.images[0] || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=450";
   
-  // Extract short description from markdown (first paragraph)
-  const getShortDescription = (markdown: string) => {
-    const lines = markdown.split('\n');
+  // Use project description, fallback to extracting from markdown
+  const getDisplayDescription = () => {
+    if (project.description && project.description.trim()) {
+      return project.description.length > 150 
+        ? project.description.substring(0, 150) + "..." 
+        : project.description;
+    }
+    
+    // Fallback to markdown extraction for older projects
+    const lines = project.markdown.split('\n');
     const firstParagraph = lines.find(line => line.trim() && !line.startsWith('#'));
     return firstParagraph?.trim().substring(0, 150) + "..." || "No description available";
   };
@@ -27,7 +34,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
       </div>
       <div className="p-6">
         <h3 className="text-xl font-semibold text-slate-900 mb-2">{project.title}</h3>
-        <p className="text-secondary mb-4">{getShortDescription(project.markdown)}</p>
+        <p className="text-secondary mb-4">{getDisplayDescription()}</p>
         <Link href={`/project/${project.id}`}>
           <a className="text-primary font-semibold hover:text-blue-700 transition-colors inline-flex items-center gap-1">
             View Project <i className="fas fa-arrow-right text-sm"></i>

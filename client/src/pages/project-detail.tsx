@@ -72,7 +72,10 @@ export default function ProjectDetail() {
                 Back to Projects
               </a>
             </Link>
-            <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">{project.title}</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">{project.title}</h1>
+            {project.description && (
+              <p className="text-lg text-slate-600 mb-4 leading-relaxed">{project.description}</p>
+            )}
             <p className="text-sm text-secondary">
               Created: {new Date(project.createdAt).toLocaleDateString('en-US', { 
                 year: 'numeric', 

@@ -5,6 +5,7 @@ import { z } from "zod";
 export const projects = pgTable("projects", {
   id: uuid("id").primaryKey().defaultRandom(),
   title: text("title").notNull(),
+  description: text("description").notNull().default(""),
   markdown: text("markdown").notNull(),
   images: text("images").array().notNull().default([]),
   createdAt: timestamp("created_at").defaultNow().notNull(),
