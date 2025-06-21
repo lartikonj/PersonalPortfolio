@@ -12,6 +12,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import ReactMarkdown from "react-markdown";
 import { z } from "zod";
 
 const adminSecret = import.meta.env.VITE_ADMIN_SECRET || "admin123";
@@ -36,6 +38,7 @@ export default function AdminPanel() {
   const { toast } = useToast();
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [imageInputs, setImageInputs] = useState<string[]>([""]);
+  const [showPreview, setShowPreview] = useState(false);
 
   // Queries
   const { data: projects, isLoading: projectsLoading } = useQuery<Project[]>({
@@ -73,8 +76,7 @@ export default function AdminPanel() {
   // Mutations
   const createProjectMutation = useMutation({
     mutationFn: async (data: ProjectFormData) => {
-      return apiRequest("POST", "/api/projects", {
-        ...data,
+      return apiRequest("POST", "/api/projects", data, {
         headers: { "x-admin-secret": adminSecret },
       });
     },
@@ -95,8 +97,7 @@ export default function AdminPanel() {
 
   const updateProjectMutation = useMutation({
     mutationFn: async ({ id, data }: { id: string; data: Partial<ProjectFormData> }) => {
-      return apiRequest("PUT", `/api/projects/${id}`, {
-        ...data,
+      return apiRequest("PUT", `/api/projects/${id}`, data, {
         headers: { "x-admin-secret": adminSecret },
       });
     },
@@ -135,8 +136,7 @@ export default function AdminPanel() {
 
   const updateResumeMutation = useMutation({
     mutationFn: async (data: ResumeFormData) => {
-      return apiRequest("PUT", "/api/resume", {
-        ...data,
+      return apiRequest("PUT", "/api/resume", data, {
         headers: { "x-admin-secret": adminSecret },
       });
     },
@@ -207,6 +207,16 @@ export default function AdminPanel() {
     const newImages = [...currentImages];
     newImages[index] = value;
     projectForm.setValue("images", newImages);
+  };
+
+  const getPreviewData = () => {
+    const formData = projectForm.getValues();
+    const validImages = formData.images.filter(img => img.trim() !== "");
+    return {
+      title: formData.title || "Untitled Project",
+      markdown: formData.markdown || "No description provided.",
+      images: validImages.length > 0 ? validImages : ["https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=450"],
+    };
   };
 
   return (
@@ -335,6 +345,95 @@ Describe your project here...
                           </>
                         )}
                       </Button>
+                      
+                      <Dialog open={showPreview} onOpenChange={setShowPreview}>
+                        <DialogTrigger asChild>
+                          <Button type="button" variant="outline">
+                            <i className="fas fa-eye mr-2"></i>
+                            Preview
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                          <DialogHeader>
+                            <DialogTitle>Project Preview</DialogTitle>
+                          </DialogHeader>
+                          <div className="space-y-6">
+                            {/* Preview Images */}
+                            {getPreviewData().images.length > 0 && (
+                              <div className="space-y-4">
+                                {getPreviewData().images.length === 1 ? (
+                                  <div className="rounded-xl overflow-hidden shadow-lg">
+                                    <img 
+                                      src={getPreviewData().images[0]}
+                                      alt="Project preview"
+                                      className="w-full h-auto max-h-96 object-cover"
+                                    />
+                                  </div>
+                                ) : getPreviewData().images.length === 2 ? (
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {getPreviewData().images.map((image, index) => (
+                                      <div key={index} className="rounded-xl overflow-hidden shadow-lg">
+                                        <img 
+                                          src={image}
+                                          alt={`Preview ${index + 1}`}
+                                          className="w-full h-auto max-h-48 object-cover"
+                                        />
+                                      </div>
+                                    ))}
+                                  </div>
+                                ) : (
+                                  <div className="space-y-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                      {getPreviewData().images.slice(0, 2).map((image, index) => (
+                                        <div key={index} className="rounded-xl overflow-hidden shadow-lg">
+                                          <img 
+                                            src={image}
+                                            alt={`Preview ${index + 1}`}
+                                            className="w-full h-auto max-h-48 object-cover"
+                                          />
+                                        </div>
+                                      ))}
+                                    </div>
+                                    {getPreviewData().images.slice(2).map((image, index) => (
+                                      <div key={index + 2} className="rounded-xl overflow-hidden shadow-lg">
+                                        <img 
+                                          src={image}
+                                          alt={`Preview ${index + 3}`}
+                                          className="w-full h-auto max-h-96 object-cover"
+                                        />
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                            
+                            {/* Preview Content */}
+                            <div>
+                              <h2 className="text-2xl font-bold text-slate-900 mb-4">{getPreviewData().title}</h2>
+                              <div className="prose prose-slate max-w-none">
+                                <ReactMarkdown
+                                  components={{
+                                    h1: ({ children }) => <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">{children}</h2>,
+                                    h2: ({ children }) => <h3 className="text-xl font-semibold text-slate-900 mt-6 mb-3">{children}</h3>,
+                                    h3: ({ children }) => <h4 className="text-lg font-medium text-slate-900 mt-4 mb-2">{children}</h4>,
+                                    p: ({ children }) => <p className="text-slate-700 mb-4 leading-relaxed">{children}</p>,
+                                    ul: ({ children }) => <ul className="list-disc pl-6 mb-4 space-y-1">{children}</ul>,
+                                    ol: ({ children }) => <ol className="list-decimal pl-6 mb-4 space-y-1">{children}</ol>,
+                                    li: ({ children }) => <li className="text-slate-700">{children}</li>,
+                                    strong: ({ children }) => <strong className="font-semibold text-slate-900">{children}</strong>,
+                                    code: ({ children }) => <code className="bg-slate-100 px-2 py-1 rounded text-sm font-mono">{children}</code>,
+                                    pre: ({ children }) => <pre className="bg-slate-100 p-4 rounded-lg overflow-x-auto mb-4">{children}</pre>,
+                                  }}
+                                >
+                                  {getPreviewData().markdown}
+                                </ReactMarkdown>
+                              </div>
+                            </div>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+
                       {editingProject && (
                         <Button type="button" variant="outline" onClick={handleCancelEdit}>
                           Cancel
