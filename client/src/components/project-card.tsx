@@ -1,0 +1,39 @@
+import { Link } from "wouter";
+import type { Project } from "@shared/schema";
+
+interface ProjectCardProps {
+  project: Project;
+}
+
+export function ProjectCard({ project }: ProjectCardProps) {
+  // Extract first image for thumbnail
+  const thumbnailImage = project.images[0] || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=450";
+  
+  // Extract short description from markdown (first paragraph)
+  const getShortDescription = (markdown: string) => {
+    const lines = markdown.split('\n');
+    const firstParagraph = lines.find(line => line.trim() && !line.startsWith('#'));
+    return firstParagraph?.trim().substring(0, 150) + "..." || "No description available";
+  };
+
+  return (
+    <div className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-slate-200">
+      <div className="aspect-video bg-slate-100 overflow-hidden">
+        <img 
+          src={thumbnailImage}
+          alt={project.title}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+      </div>
+      <div className="p-6">
+        <h3 className="text-xl font-semibold text-slate-900 mb-2">{project.title}</h3>
+        <p className="text-secondary mb-4">{getShortDescription(project.markdown)}</p>
+        <Link href={`/project/${project.id}`}>
+          <a className="text-primary font-semibold hover:text-blue-700 transition-colors inline-flex items-center gap-1">
+            View Project <i className="fas fa-arrow-right text-sm"></i>
+          </a>
+        </Link>
+      </div>
+    </div>
+  );
+}
