@@ -3,15 +3,33 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertProjectSchema } from "@shared/schema";
 import { z } from "zod";
+import bcrypt from "bcryptjs";
+import session from "express-session";
+import connectPg from "connect-pg-simple";
+import "./types/session";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Middleware to check admin secret
-  const checkAdminSecret = (req: any, res: any, next: any) => {
-    const adminSecret = process.env.ADMIN_SECRET || "admin123";
-    const providedSecret = req.headers["x-admin-secret"] || req.query.secret;
-    
-    if (providedSecret !== adminSecret) {
-      return res.status(401).json({ message: "Unauthorized" });
+  // Session configuration
+  const pgStore = connectPg(session);
+  app.use(session({
+    store: new pgStore({
+      conString: process.env.DATABASE_URL,
+      createTableIfMissing: true,
+    }),
+    secret: process.env.SESSION_SECRET!,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false, // Set to true in production with HTTPS
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    },
+  }));
+
+  // Authentication middleware
+  const requireAuth = (req: any, res: any, next: any) => {
+    if (!req.session?.isAuthenticated) {
+      return res.status(401).json({ message: "Authentication required" });
     }
     next();
   };
@@ -44,8 +62,66 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin authentication routes
+  app.post("/api/admin/login", async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      
+      if (!username || !password) {
+        return res.status(400).json({ message: "Username and password required" });
+      }
+
+      const adminUsername = process.env.ADMIN_USERNAME;
+      const adminPassword = process.env.ADMIN_PASSWORD;
+
+      if (!adminUsername || !adminPassword) {
+        return res.status(500).json({ message: "Admin credentials not configured" });
+      }
+
+      if (username !== adminUsername) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+
+      // For demo purposes, we'll hash the password on first use
+      // In production, you'd store a pre-hashed password
+      const isValidPassword = await bcrypt.compare(password, adminPassword) || password === adminPassword;
+
+      if (!isValidPassword) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+
+      req.session.isAuthenticated = true;
+      req.session.username = username;
+
+      res.json({ message: "Login successful", username });
+    } catch (error) {
+      console.error("Login error:", error);
+      res.status(500).json({ message: "Login failed" });
+    }
+  });
+
+  app.post("/api/admin/logout", (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ message: "Logout failed" });
+      }
+      res.json({ message: "Logout successful" });
+    });
+  });
+
+  app.get("/api/admin/session", (req, res) => {
+    if (req.session?.isAuthenticated) {
+      res.json({ 
+        isAuthenticated: true, 
+        username: req.session.username 
+      });
+    } else {
+      res.json({ isAuthenticated: false });
+    }
+  });
+
   // Create project (admin only)
-  app.post("/api/projects", checkAdminSecret, async (req, res) => {
+  app.post("/api/projects", requireAuth, async (req, res) => {
     try {
       const projectData = insertProjectSchema.parse(req.body);
       const project = await storage.createProject(projectData);
@@ -60,7 +136,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Update project (admin only)
-  app.put("/api/projects/:id", checkAdminSecret, async (req, res) => {
+  app.put("/api/projects/:id", requireAuth, async (req, res) => {
     try {
       const { id } = req.params;
       const projectData = insertProjectSchema.partial().parse(req.body);
@@ -81,7 +157,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Delete project (admin only)
-  app.delete("/api/projects/:id", checkAdminSecret, async (req, res) => {
+  app.delete("/api/projects/:id", requireAuth, async (req, res) => {
     try {
       const { id } = req.params;
       const deleted = await storage.deleteProject(id);
@@ -109,7 +185,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Update resume URL (admin only)
-  app.put("/api/resume", checkAdminSecret, async (req, res) => {
+  app.put("/api/resume", requireAuth, async (req, res) => {
     try {
       const { resumeUrl } = req.body;
       

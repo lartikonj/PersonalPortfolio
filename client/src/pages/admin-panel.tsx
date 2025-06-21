@@ -6,6 +6,7 @@ import { insertProjectSchema } from "@shared/schema";
 import type { Project } from "@shared/schema";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,9 +15,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import ReactMarkdown from "react-markdown";
+import AdminLogin from "./admin-login";
 import { z } from "zod";
 
-const adminSecret = import.meta.env.VITE_ADMIN_SECRET || "admin123";
+// Remove admin secret - now using session-based auth
 
 // Form schemas
 const projectFormSchema = insertProjectSchema.extend({
@@ -37,9 +39,26 @@ interface ResumeData {
 
 export default function AdminPanel() {
   const { toast } = useToast();
+  const { isAuthenticated, username, isLoading, logout, isLoggingOut } = useAdminAuth();
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [imageInputs, setImageInputs] = useState<string[]>([""]);
   const [showPreview, setShowPreview] = useState(false);
+
+  // Show login screen if not authenticated
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-lg font-medium text-slate-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <AdminLogin onLoginSuccess={() => window.location.reload()} />;
+  }
 
   // Queries
   const { data: projects, isLoading: projectsLoading } = useQuery<Project[]>({
@@ -78,9 +97,7 @@ export default function AdminPanel() {
   // Mutations
   const createProjectMutation = useMutation({
     mutationFn: async (data: ProjectFormData) => {
-      return apiRequest("POST", "/api/projects", data, {
-        headers: { "x-admin-secret": adminSecret },
-      });
+      return apiRequest("POST", "/api/projects", data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/projects"] });
@@ -99,9 +116,7 @@ export default function AdminPanel() {
 
   const updateProjectMutation = useMutation({
     mutationFn: async ({ id, data }: { id: string; data: Partial<ProjectFormData> }) => {
-      return apiRequest("PUT", `/api/projects/${id}`, data, {
-        headers: { "x-admin-secret": adminSecret },
-      });
+      return apiRequest("PUT", `/api/projects/${id}`, data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/projects"] });
@@ -121,7 +136,7 @@ export default function AdminPanel() {
 
   const deleteProjectMutation = useMutation({
     mutationFn: async (id: string) => {
-      return apiRequest("DELETE", `/api/projects/${id}?secret=${adminSecret}`, undefined);
+      return apiRequest("DELETE", `/api/projects/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/projects"] });
@@ -138,9 +153,7 @@ export default function AdminPanel() {
 
   const updateResumeMutation = useMutation({
     mutationFn: async (data: ResumeFormData) => {
-      return apiRequest("PUT", "/api/resume", data, {
-        headers: { "x-admin-secret": adminSecret },
-      });
+      return apiRequest("PUT", "/api/resume", data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/resume"] });
@@ -234,9 +247,32 @@ export default function AdminPanel() {
       <section className="py-12 bg-slate-50 min-h-screen">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Admin Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Admin Panel</h1>
-            <p className="text-lg text-secondary">Manage your portfolio content</p>
+          <div className="flex justify-between items-center mb-8">
+            <div>
+              <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">Admin Panel</h1>
+              <p className="text-lg text-secondary">Manage your portfolio content</p>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="text-right">
+                <p className="text-sm font-medium text-slate-900">Welcome, {username}</p>
+                <p className="text-xs text-secondary">Authenticated Session</p>
+              </div>
+              <Button
+                variant="outline"
+                onClick={() => logout()}
+                disabled={isLoggingOut}
+                className="text-red-600 hover:text-red-700 hover:bg-red-50"
+              >
+                {isLoggingOut ? (
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-red-600"></div>
+                ) : (
+                  <>
+                    <i className="fas fa-sign-out-alt mr-2"></i>
+                    Logout
+                  </>
+                )}
+              </Button>
+            </div>
           </div>
 
           <Tabs defaultValue="projects" className="w-full">
