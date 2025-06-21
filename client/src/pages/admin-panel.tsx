@@ -37,28 +37,12 @@ interface ResumeData {
   resumeUrl: string | null;
 }
 
-export default function AdminPanel() {
+function AdminContent() {
   const { toast } = useToast();
-  const { isAuthenticated, username, isLoading, logout, isLoggingOut } = useAdminAuth();
+  const { username, logout, isLoggingOut } = useAdminAuth();
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [imageInputs, setImageInputs] = useState<string[]>([""]);
   const [showPreview, setShowPreview] = useState(false);
-
-  // Show login screen if not authenticated
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-lg font-medium text-slate-600">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return <AdminLogin onLoginSuccess={() => window.location.reload()} />;
-  }
 
   // Queries
   const { data: projects, isLoading: projectsLoading } = useQuery<Project[]>({
@@ -664,4 +648,28 @@ Describe your project here...
       </section>
     </div>
   );
+}
+
+export default function AdminPanel() {
+  const { isAuthenticated, isLoading } = useAdminAuth();
+
+  // Show loading screen
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-lg font-medium text-slate-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show login screen if not authenticated
+  if (!isAuthenticated) {
+    return <AdminLogin onLoginSuccess={() => window.location.reload()} />;
+  }
+
+  // Show admin content if authenticated
+  return <AdminContent />;
 }

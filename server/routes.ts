@@ -67,6 +67,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { username, password } = req.body;
       
+      console.log("Login attempt:", { username, hasPassword: !!password });
+      
       if (!username || !password) {
         return res.status(400).json({ message: "Username and password required" });
       }
@@ -74,17 +76,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const adminUsername = process.env.ADMIN_USERNAME;
       const adminPassword = process.env.ADMIN_PASSWORD;
 
+      console.log("Environment check:", { 
+        hasAdminUsername: !!adminUsername, 
+        hasAdminPassword: !!adminPassword,
+        adminUsername: adminUsername // For debugging only
+      });
+
       if (!adminUsername || !adminPassword) {
         return res.status(500).json({ message: "Admin credentials not configured" });
       }
 
       if (username !== adminUsername) {
+        console.log("Username mismatch:", { provided: username, expected: adminUsername });
         return res.status(401).json({ message: "Invalid credentials" });
       }
 
-      // For demo purposes, we'll hash the password on first use
-      // In production, you'd store a pre-hashed password
-      const isValidPassword = await bcrypt.compare(password, adminPassword) || password === adminPassword;
+      // Compare with plain text password for simplicity
+      const isValidPassword = password === adminPassword;
+      console.log("Password check:", { isValid: isValidPassword });
 
       if (!isValidPassword) {
         return res.status(401).json({ message: "Invalid credentials" });
@@ -93,6 +102,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       req.session.isAuthenticated = true;
       req.session.username = username;
 
+      console.log("Login successful for:", username);
       res.json({ message: "Login successful", username });
     } catch (error) {
       console.error("Login error:", error);
