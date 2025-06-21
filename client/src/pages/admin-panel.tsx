@@ -177,6 +177,12 @@ export default function AdminPanel() {
     projectForm.setValue("markdown", project.markdown);
     projectForm.setValue("images", project.images);
     setImageInputs(project.images.length > 0 ? project.images : [""]);
+    
+    // Scroll to the form
+    const formElement = document.getElementById("project-form");
+    if (formElement) {
+      formElement.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   const handleCancelEdit = () => {
@@ -237,11 +243,16 @@ export default function AdminPanel() {
 
             <TabsContent value="projects" className="space-y-8">
               {/* Add/Edit Project Form */}
-              <Card>
+              <Card id="project-form">
                 <CardHeader>
                   <CardTitle>
-                    {editingProject ? "Edit Project" : "Add New Project"}
+                    {editingProject ? `Edit Project: ${editingProject.title}` : "Add New Project"}
                   </CardTitle>
+                  {editingProject && (
+                    <p className="text-sm text-secondary">
+                      Editing project created on {new Date(editingProject.createdAt).toLocaleDateString()}
+                    </p>
+                  )}
                 </CardHeader>
                 <CardContent>
                   <form onSubmit={projectForm.handleSubmit(handleProjectSubmit)} className="space-y-6">
@@ -436,7 +447,8 @@ Describe your project here...
 
                       {editingProject && (
                         <Button type="button" variant="outline" onClick={handleCancelEdit}>
-                          Cancel
+                          <i className="fas fa-times mr-2"></i>
+                          Cancel Edit
                         </Button>
                       )}
                     </div>
@@ -464,7 +476,11 @@ Describe your project here...
                       {projects.map((project) => (
                         <div
                           key={project.id}
-                          className="border border-slate-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                          className={`border rounded-lg p-4 hover:shadow-md transition-all ${
+                            editingProject?.id === project.id 
+                              ? 'border-primary bg-primary/5 shadow-md' 
+                              : 'border-slate-200'
+                          }`}
                         >
                           <div className="flex justify-between items-start">
                             <div className="flex-1">
@@ -476,6 +492,11 @@ Describe your project here...
                                 <span className="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded">
                                   {project.images.length} images
                                 </span>
+                                {editingProject?.id === project.id && (
+                                  <span className="text-xs bg-primary text-white px-2 py-1 rounded">
+                                    Currently Editing
+                                  </span>
+                                )}
                               </div>
                             </div>
                             <div className="flex gap-2">
@@ -483,17 +504,31 @@ Describe your project here...
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => handleEditProject(project)}
+                                title="Edit project"
                               >
-                                <i className="fas fa-edit"></i>
+                                <i className="fas fa-edit mr-1"></i>
+                                Edit
                               </Button>
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => deleteProjectMutation.mutate(project.id)}
+                                onClick={() => {
+                                  if (window.confirm(`Are you sure you want to delete "${project.title}"? This action cannot be undone.`)) {
+                                    deleteProjectMutation.mutate(project.id);
+                                  }
+                                }}
                                 disabled={deleteProjectMutation.isPending}
-                                className="text-red-600 hover:text-red-700"
+                                className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                title="Delete project"
                               >
-                                <i className="fas fa-trash"></i>
+                                {deleteProjectMutation.isPending ? (
+                                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-red-600"></div>
+                                ) : (
+                                  <>
+                                    <i className="fas fa-trash mr-1"></i>
+                                    Delete
+                                  </>
+                                )}
                               </Button>
                             </div>
                           </div>
