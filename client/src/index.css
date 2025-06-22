@@ -1,83 +1,70 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: hsl(0, 0%, 98%);
-  --foreground: hsl(240, 10%, 3.9%);
-  --muted: hsl(240, 4.8%, 95.9%);
-  --muted-foreground: hsl(240, 3.8%, 46.1%);
-  --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(240, 10%, 3.9%);
-  --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(240, 10%, 3.9%);
-  --border: hsl(240, 5.9%, 90%);
-  --input: hsl(240, 5.9%, 90%);
-  --primary: hsl(262.1, 83.3%, 57.8%);
-  --primary-foreground: hsl(210, 40%, 98%);
-  --secondary: hsl(240, 4.8%, 95.9%);
-  --secondary-foreground: hsl(240, 5.9%, 10%);
-  --accent: hsl(240, 4.8%, 95.9%);
-  --accent-foreground: hsl(240, 5.9%, 10%);
-  --destructive: hsl(0, 84.2%, 60.2%);
+  /* Technological Dark Theme - Modern Blue/Cyan Palette */
+  --background: hsl(220, 27%, 6%);
+  --foreground: hsl(210, 40%, 92%);
+  --muted: hsl(217, 32%, 14%);
+  --muted-foreground: hsl(215, 20%, 65%);
+  --popover: hsl(220, 27%, 8%);
+  --popover-foreground: hsl(210, 40%, 92%);
+  --card: hsl(220, 27%, 8%);
+  --card-foreground: hsl(210, 40%, 92%);
+  --border: hsl(217, 32%, 18%);
+  --input: hsl(217, 32%, 18%);
+  --primary: hsl(195, 100%, 50%);
+  --primary-foreground: hsl(220, 27%, 6%);
+  --secondary: hsl(217, 32%, 14%);
+  --secondary-foreground: hsl(210, 40%, 92%);
+  --accent: hsl(195, 100%, 50%);
+  --accent-foreground: hsl(220, 27%, 6%);
+  --destructive: hsl(0, 84%, 60%);
   --destructive-foreground: hsl(210, 40%, 98%);
-  --ring: hsl(262.1, 83.3%, 57.8%);
+  --ring: hsl(195, 100%, 50%);
   --radius: 0.75rem;
 
-  /* Modern gradient colors */
-  --gradient-from: hsl(262.1, 83.3%, 57.8%);
-  --gradient-to: hsl(221.2, 83.2%, 53.3%);
-  
-  /* Custom slate colors for better consistency */
-  --slate-50: hsl(210, 40%, 98%);
-  --slate-100: hsl(210, 40%, 96%);
-  --slate-200: hsl(214.3, 31.8%, 91.4%);
-  --slate-300: hsl(212.7, 26.8%, 83.9%);
-  --slate-400: hsl(215.4, 16.3%, 56.9%);
-  --slate-500: hsl(215.4, 16.3%, 46.9%);
-  --slate-600: hsl(215.3, 19.3%, 34.5%);
-  --slate-700: hsl(215.3, 25%, 26.7%);
-  --slate-800: hsl(217.2, 32.6%, 17.5%);
-  --slate-900: hsl(222.2, 84%, 4.9%);
+  /* Modern gradient colors - Technological Blue/Cyan */
+  --gradient-from: hsl(195, 100%, 50%);
+  --gradient-to: hsl(260, 100%, 65%);
+
+  /* Technological slate colors */
+  --slate-50: hsl(210, 40%, 92%);
+  --slate-100: hsl(215, 20%, 85%);
+  --slate-200: hsl(217, 19%, 75%);
+  --slate-300: hsl(215, 20%, 65%);
+  --slate-400: hsl(215, 16%, 47%);
+  --slate-500: hsl(215, 16%, 37%);
+  --slate-600: hsl(217, 19%, 27%);
+  --slate-700: hsl(217, 32%, 18%);
+  --slate-800: hsl(217, 32%, 14%);
+  --slate-900: hsl(220, 27%, 8%);
 }
 
-.dark {
-  --background: hsl(222.2, 84%, 4.9%);
-  --foreground: hsl(210, 40%, 98%);
-  --muted: hsl(217.2, 32.6%, 17.5%);
-  --muted-foreground: hsl(215, 20.2%, 65.1%);
-  --popover: hsl(222.2, 84%, 4.9%);
-  --popover-foreground: hsl(210, 40%, 98%);
-  --card: hsl(222.2, 84%, 4.9%);
-  --card-foreground: hsl(210, 40%, 98%);
-  --border: hsl(217.2, 32.6%, 17.5%);
-  --input: hsl(217.2, 32.6%, 17.5%);
-  --primary: hsl(217.2, 91.2%, 59.8%);
-  --primary-foreground: hsl(222.2, 84%, 4.9%);
-  --secondary: hsl(217.2, 32.6%, 17.5%);
-  --secondary-foreground: hsl(210, 40%, 98%);
-  --accent: hsl(217.2, 32.6%, 17.5%);
-  --accent-foreground: hsl(210, 40%, 98%);
-  --destructive: hsl(0, 62.8%, 30.6%);
-  --destructive-foreground: hsl(210, 40%, 98%);
-  --ring: hsl(217.2, 91.2%, 59.8%);
+/* Enhanced theme classes */
+.primary {
+  color: var(--primary);
+}
 
-  /* Dark mode gradient colors */
-  --gradient-from: hsl(217.2, 91.2%, 59.8%);
-  --gradient-to: hsl(263.4, 70%, 50.4%);
+.secondary {
+  color: var(--secondary-foreground);
+}
 
-  /* Custom slate colors for dark mode */
-  --slate-50: hsl(222.2, 84%, 4.9%);
-  --slate-100: hsl(217.2, 32.6%, 17.5%);
-  --slate-200: hsl(215.3, 25%, 26.7%);
-  --slate-300: hsl(215.4, 16.3%, 46.9%);
-  --slate-400: hsl(215.4, 16.3%, 56.9%);
-  --slate-500: hsl(212.7, 26.8%, 63.9%);
-  --slate-600: hsl(210, 40%, 78%);
-  --slate-700: hsl(210, 40%, 88%);
-  --slate-800: hsl(210, 40%, 93%);
-  --slate-900: hsl(210, 40%, 98%);
+.accent {
+  color: var(--primary);
+}
+
+/* Modern gradient backgrounds */
+.gradient-bg {
+  background: linear-gradient(135deg, var(--gradient-from) 0%, var(--gradient-to) 100%);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--gradient-from) 0%, var(--gradient-to) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 @layer base {
@@ -88,36 +75,15 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     transition: background-color 0.3s ease, color 0.3s ease;
-  }
-
-  /* Enhanced theme classes */
-  .primary {
-    color: var(--primary);
-  }
-
-  .secondary {
-    color: var(--secondary-foreground);
-  }
-
-  .accent {
-    color: var(--primary);
-  }
-
-  /* Modern gradient backgrounds */
-  .gradient-bg {
-    background: linear-gradient(135deg, var(--gradient-from) 0%, var(--gradient-to) 100%);
-  }
-  
-  .gradient-text {
-    background: linear-gradient(135deg, var(--gradient-from) 0%, var(--gradient-to) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    /* Add subtle technological texture */
+    background-image: 
+      radial-gradient(circle at 25% 25%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, rgba(138, 43, 226, 0.1) 0%, transparent 50%);
   }
 }
 
 @layer components {
-  /* Enhanced prose styles with better theming */
+  /* Enhanced prose styles with technological theming */
   .prose {
     @apply max-w-none;
     color: var(--foreground);
@@ -163,55 +129,66 @@
   .prose code {
     @apply px-2 py-1 rounded text-sm font-mono;
     background-color: var(--muted);
-    color: var(--foreground);
+    color: var(--accent);
+    border: 1px solid var(--border);
   }
 
   .prose pre {
     @apply p-4 rounded-lg overflow-x-auto mb-4;
     background-color: var(--muted);
+    border: 1px solid var(--border);
   }
 
-  /* Modern card styles */
+  /* Modern card styles with technological enhancement */
   .modern-card {
     @apply rounded-xl border shadow-sm transition-all duration-300;
     background-color: var(--card);
     border-color: var(--border);
+    box-shadow: 0 4px 6px -1px rgba(0, 255, 255, 0.1), 0 2px 4px -1px rgba(0, 255, 255, 0.06);
   }
 
   .modern-card:hover {
     @apply shadow-lg;
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 20px 25px -5px rgba(0, 255, 255, 0.2), 0 10px 10px -5px rgba(0, 255, 255, 0.1);
+    border-color: var(--accent);
   }
 
-  .dark .modern-card:hover {
-    box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
-  }
-
-  /* Enhanced button styles */
+  /* Enhanced button styles with technological glow */
   .btn-gradient {
     @apply rounded-lg px-6 py-3 font-medium transition-all duration-300;
     background: linear-gradient(135deg, var(--gradient-from) 0%, var(--gradient-to) 100%);
     color: var(--primary-foreground);
     border: none;
+    box-shadow: 0 4px 15px rgba(0, 255, 255, 0.3);
   }
 
   .btn-gradient:hover {
     @apply shadow-lg;
     transform: translateY(-1px);
     filter: brightness(1.1);
+    box-shadow: 0 6px 20px rgba(0, 255, 255, 0.4);
   }
 
-  /* Modern navigation styles */
+  /* Modern navigation styles with technological enhancement */
   .nav-modern {
     @apply backdrop-blur-md border-b;
-    background-color: rgba(255, 255, 255, 0.8);
+    background: linear-gradient(135deg, 
+      rgba(15, 23, 42, 0.9) 0%, 
+      rgba(30, 41, 59, 0.9) 100%);
     border-color: var(--border);
+    box-shadow: 0 4px 6px -1px rgba(0, 255, 255, 0.1);
   }
 
-  .dark .nav-modern {
-    background-color: rgba(15, 23, 42, 0.8);
+  /* Technological glow effects */
+  .tech-glow {
+    box-shadow: 
+      0 0 5px var(--accent),
+      inset 0 0 5px rgba(0, 255, 255, 0.1);
+  }
+
+  .tech-border {
+    border: 1px solid var(--accent);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
   }
 }
-
-/* Remove FontAwesome import to fix CSS warnings */

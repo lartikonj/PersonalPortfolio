@@ -1,5 +1,4 @@
 import { Link, useLocation } from "wouter";
-import { ThemeToggle } from "@/components/theme-toggle";
 
 export function Navbar() {
   const [location] = useLocation();
@@ -42,7 +41,7 @@ export function Navbar() {
           </div>
         </div>
         <div className="flex items-center space-x-4">
-          <ThemeToggle />
+          {/* Theme toggle removed - using permanent dark theme */}
         </div>
       </div>
     </nav>
