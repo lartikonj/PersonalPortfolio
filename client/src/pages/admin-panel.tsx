@@ -14,6 +14,8 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { SiteSettings } from "@/components/site-settings";
+import { PageManager } from "@/components/page-manager";
 import ReactMarkdown from "react-markdown";
 import AdminLogin from "./admin-login";
 import { z } from "zod";
@@ -260,8 +262,10 @@ function AdminContent() {
           </div>
 
           <Tabs defaultValue="projects" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="projects">Projects</TabsTrigger>
+              <TabsTrigger value="pages">Pages</TabsTrigger>
+              <TabsTrigger value="settings">Settings</TabsTrigger>
               <TabsTrigger value="resume">Resume</TabsTrigger>
             </TabsList>
 
@@ -583,6 +587,14 @@ Describe your project here...
                   )}
                 </CardContent>
               </Card>
+            </TabsContent>
+
+            <TabsContent value="pages">
+              <PageManager />
+            </TabsContent>
+
+            <TabsContent value="settings">
+              <SiteSettings />
             </TabsContent>
 
             <TabsContent value="resume">

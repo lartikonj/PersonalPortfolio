@@ -1,4 +1,5 @@
 import { Link, useLocation } from "wouter";
+import { useQuery } from "@tanstack/react-query";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,6 +10,17 @@ import { ChevronDown } from "lucide-react";
 
 export function Navbar() {
   const [location] = useLocation();
+
+  const { data: settings } = useQuery({
+    queryKey: ["/api/settings"],
+  });
+
+  const { data: pages = [] } = useQuery({
+    queryKey: ["/api/pages"],
+  });
+
+  const siteName = settings?.find((s: any) => s.key === "site_name")?.value || "Portfolio";
+  const publishedPages = pages.filter((page: any) => page.published);
 
   const navItems = [
     { path: "/", label: "Home" },
@@ -21,7 +33,7 @@ export function Navbar() {
         <div className="flex items-center space-x-8">
           <Link href="/">
             <span className="gradient-text text-xl font-bold cursor-pointer bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Portfolio
+              {siteName}
             </span>
           </Link>
           <div className="hidden md:flex space-x-6">
@@ -44,6 +56,27 @@ export function Navbar() {
                 </Link>
               );
             })}
+            
+            {/* Pages Dropdown */}
+            {publishedPages.length > 0 && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <span className="cursor-pointer px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 flex items-center gap-1">
+                    Pages
+                    <ChevronDown className="h-4 w-4" />
+                  </span>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-48">
+                  {publishedPages.map((page: any) => (
+                    <DropdownMenuItem key={page.id} asChild>
+                      <Link href={`/page/${page.slug}`}>
+                        <span className="cursor-pointer">{page.title}</span>
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
           </div>
         </div>
         <div className="flex items-center space-x-4">

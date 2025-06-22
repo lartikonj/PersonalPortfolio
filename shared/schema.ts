@@ -1,4 +1,4 @@
-import { pgTable, text, serial, uuid, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, uuid, timestamp, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -44,3 +44,22 @@ export const insertUserSchema = createInsertSchema(users).pick({
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
+
+export const pages = pgTable("pages", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  title: text("title").notNull(),
+  slug: text("slug").notNull().unique(),
+  content: text("content").notNull(),
+  published: boolean("published").default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertPageSchema = createInsertSchema(pages).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertPage = z.infer<typeof insertPageSchema>;
+export type Page = typeof pages.$inferSelect;

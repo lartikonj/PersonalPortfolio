@@ -1,13 +1,16 @@
 import { 
   projects, 
   settings, 
-  users, 
+  users,
+  pages,
   type Project, 
   type InsertProject,
   type Setting,
   type InsertSetting,
   type User, 
-  type InsertUser 
+  type InsertUser,
+  type Page,
+  type InsertPage
 } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
@@ -28,6 +31,15 @@ export interface IStorage {
   // Settings methods
   getSetting(key: string): Promise<Setting | undefined>;
   setSetting(key: string, value: string): Promise<Setting>;
+  getAllSettings(): Promise<Setting[]>;
+  
+  // Page methods
+  getAllPages(): Promise<Page[]>;
+  getPage(id: string): Promise<Page | undefined>;
+  getPageBySlug(slug: string): Promise<Page | undefined>;
+  createPage(page: InsertPage): Promise<Page>;
+  updatePage(id: string, page: Partial<InsertPage>): Promise<Page | undefined>;
+  deletePage(id: string): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -105,6 +117,44 @@ export class DatabaseStorage implements IStorage {
         .returning();
       return setting;
     }
+  }
+
+  async getAllSettings(): Promise<Setting[]> {
+    return await db.select().from(settings);
+  }
+
+  // Page methods
+  async getAllPages(): Promise<Page[]> {
+    return await db.select().from(pages).orderBy(pages.createdAt);
+  }
+
+  async getPage(id: string): Promise<Page | undefined> {
+    const [page] = await db.select().from(pages).where(eq(pages.id, id));
+    return page;
+  }
+
+  async getPageBySlug(slug: string): Promise<Page | undefined> {
+    const [page] = await db.select().from(pages).where(eq(pages.slug, slug));
+    return page;
+  }
+
+  async createPage(page: InsertPage): Promise<Page> {
+    const [created] = await db.insert(pages).values(page).returning();
+    return created;
+  }
+
+  async updatePage(id: string, page: Partial<InsertPage>): Promise<Page | undefined> {
+    const [updated] = await db
+      .update(pages)
+      .set({ ...page, updatedAt: new Date() })
+      .where(eq(pages.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deletePage(id: string): Promise<boolean> {
+    const result = await db.delete(pages).where(eq(pages.id, id));
+    return (result.rowCount ?? 0) > 0;
   }
 }
 

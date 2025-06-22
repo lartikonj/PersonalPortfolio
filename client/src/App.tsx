@@ -7,6 +7,7 @@ import { Navbar } from "@/components/navbar";
 import Home from "@/pages/home";
 import Resume from "@/pages/resume";
 import ProjectDetail from "@/pages/project-detail";
+import PageDetail from "@/pages/page-detail";
 import AdminPanel from "@/pages/admin-panel";
 import NotFound from "@/pages/not-found";
 import { useEffect } from "react";
@@ -44,6 +45,7 @@ function App() {
               <Route path="/resume" component={Resume} />
               <Route path="/admin" component={AdminPanel} />
               <Route path="/project/:id" component={ProjectDetail} />
+              <Route path="/page/:slug" component={PageDetail} />
               <Route component={NotFound} />
             </Switch>
           </div>

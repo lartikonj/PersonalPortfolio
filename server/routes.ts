@@ -7,6 +7,7 @@ import bcrypt from "bcryptjs";
 import session from "express-session";
 import connectPg from "connect-pg-simple";
 import "./types/session";
+import { insertPageSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Session configuration
@@ -208,6 +209,133 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error updating resume URL:", error);
       res.status(500).json({ message: "Failed to update resume URL" });
+    }
+  });
+
+  // Settings routes
+  app.get("/api/settings", async (req, res) => {
+    try {
+      const allSettings = await storage.getAllSettings();
+      res.json(allSettings);
+    } catch (error) {
+      console.error("Error fetching settings:", error);
+      res.status(500).json({ message: "Failed to fetch settings" });
+    }
+  });
+
+  app.post("/api/settings", requireAuth, async (req, res) => {
+    try {
+      const { key, value } = req.body;
+      
+      if (!key || !value) {
+        return res.status(400).json({ message: "Key and value are required" });
+      }
+      
+      const setting = await storage.setSetting(key, value);
+      res.json(setting);
+    } catch (error) {
+      console.error("Error updating setting:", error);
+      res.status(500).json({ message: "Failed to update setting" });
+    }
+  });
+
+  // Pages routes
+  app.get("/api/pages", async (req, res) => {
+    try {
+      const allPages = await storage.getAllPages();
+      res.json(allPages);
+    } catch (error) {
+      console.error("Error fetching pages:", error);
+      res.status(500).json({ message: "Failed to fetch pages" });
+    }
+  });
+
+  app.get("/api/pages/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const page = await storage.getPage(id);
+      
+      if (!page) {
+        return res.status(404).json({ message: "Page not found" });
+      }
+      
+      res.json(page);
+    } catch (error) {
+      console.error("Error fetching page:", error);
+      res.status(500).json({ message: "Failed to fetch page" });
+    }
+  });
+
+  app.get("/api/page/:slug", async (req, res) => {
+    try {
+      const { slug } = req.params;
+      const page = await storage.getPageBySlug(slug);
+      
+      if (!page || !page.published) {
+        return res.status(404).json({ message: "Page not found" });
+      }
+      
+      res.json(page);
+    } catch (error) {
+      console.error("Error fetching page:", error);
+      res.status(500).json({ message: "Failed to fetch page" });
+    }
+  });
+
+  app.post("/api/pages", requireAuth, async (req, res) => {
+    try {
+      const pageData = insertPageSchema.parse(req.body);
+      const page = await storage.createPage(pageData);
+      res.status(201).json(page);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          message: "Validation failed", 
+          errors: error.errors.map(e => `${e.path.join('.')}: ${e.message}`)
+        });
+      }
+      console.error("Error creating page:", error);
+      res.status(500).json({ message: "Failed to create page" });
+    }
+  });
+
+  app.put("/api/pages/:id", requireAuth, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const pageData = insertPageSchema.partial().parse(req.body);
+      
+      const page = await storage.updatePage(id, pageData);
+      
+      if (!page) {
+        return res.status(404).json({ message: "Page not found" });
+      }
+      
+      res.json(page);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          message: "Validation failed", 
+          errors: error.errors.map(e => `${e.path.join('.')}: ${e.message}`)
+        });
+      }
+      console.error("Error updating page:", error);
+      res.status(500).json({ message: "Failed to update page" });
+    }
+  });
+
+  app.delete("/api/pages/:id", requireAuth, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const success = await storage.deletePage(id);
+      
+      if (!success) {
+        return res.status(404).json({ message: "Page not found" });
+      }
+      
+      res.json({ message: "Page deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting page:", error);
+      res.status(500).json({ message: "Failed to delete page" });
     }
   });
 
