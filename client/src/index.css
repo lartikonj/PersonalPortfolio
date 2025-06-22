@@ -1,35 +1,40 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: hsl(0, 0%, 100%);
-  --foreground: hsl(222.2, 84%, 4.9%);
-  --muted: hsl(210, 40%, 96%);
-  --muted-foreground: hsl(215.4, 16.3%, 46.9%);
+  --background: hsl(0, 0%, 98%);
+  --foreground: hsl(240, 10%, 3.9%);
+  --muted: hsl(240, 4.8%, 95.9%);
+  --muted-foreground: hsl(240, 3.8%, 46.1%);
   --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(222.2, 84%, 4.9%);
+  --popover-foreground: hsl(240, 10%, 3.9%);
   --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(222.2, 84%, 4.9%);
-  --border: hsl(214.3, 31.8%, 91.4%);
-  --input: hsl(214.3, 31.8%, 91.4%);
-  --primary: hsl(221.2, 83.2%, 53.3%);
+  --card-foreground: hsl(240, 10%, 3.9%);
+  --border: hsl(240, 5.9%, 90%);
+  --input: hsl(240, 5.9%, 90%);
+  --primary: hsl(262.1, 83.3%, 57.8%);
   --primary-foreground: hsl(210, 40%, 98%);
-  --secondary: hsl(210, 40%, 96%);
-  --secondary-foreground: hsl(222.2, 84%, 4.9%);
-  --accent: hsl(210, 40%, 96%);
-  --accent-foreground: hsl(222.2, 84%, 4.9%);
+  --secondary: hsl(240, 4.8%, 95.9%);
+  --secondary-foreground: hsl(240, 5.9%, 10%);
+  --accent: hsl(240, 4.8%, 95.9%);
+  --accent-foreground: hsl(240, 5.9%, 10%);
   --destructive: hsl(0, 84.2%, 60.2%);
   --destructive-foreground: hsl(210, 40%, 98%);
-  --ring: hsl(221.2, 83.2%, 53.3%);
-  --radius: 0.5rem;
+  --ring: hsl(262.1, 83.3%, 57.8%);
+  --radius: 0.75rem;
 
-  /* Custom colors for portfolio theme */
+  /* Modern gradient colors */
+  --gradient-from: hsl(262.1, 83.3%, 57.8%);
+  --gradient-to: hsl(221.2, 83.2%, 53.3%);
+  
+  /* Custom slate colors for better consistency */
   --slate-50: hsl(210, 40%, 98%);
   --slate-100: hsl(210, 40%, 96%);
   --slate-200: hsl(214.3, 31.8%, 91.4%);
   --slate-300: hsl(212.7, 26.8%, 83.9%);
-  --slate-400: hsl(215.4, 16.3%, 46.9%);
+  --slate-400: hsl(215.4, 16.3%, 56.9%);
   --slate-500: hsl(215.4, 16.3%, 46.9%);
   --slate-600: hsl(215.3, 19.3%, 34.5%);
   --slate-700: hsl(215.3, 25%, 26.7%);
@@ -38,25 +43,29 @@
 }
 
 .dark {
-  --background: hsl(222.2, 84%, 4.9%);
-  --foreground: hsl(210, 40%, 98%);
-  --muted: hsl(217.2, 32.6%, 17.5%);
-  --muted-foreground: hsl(215, 20.2%, 65.1%);
-  --popover: hsl(222.2, 84%, 4.9%);
-  --popover-foreground: hsl(210, 40%, 98%);
-  --card: hsl(222.2, 84%, 4.9%);
-  --card-foreground: hsl(210, 40%, 98%);
-  --border: hsl(217.2, 32.6%, 17.5%);
-  --input: hsl(217.2, 32.6%, 17.5%);
-  --primary: hsl(221.2, 83.2%, 53.3%);
-  --primary-foreground: hsl(222.2, 84%, 4.9%);
-  --secondary: hsl(217.2, 32.6%, 17.5%);
-  --secondary-foreground: hsl(210, 40%, 98%);
-  --accent: hsl(217.2, 32.6%, 17.5%);
-  --accent-foreground: hsl(210, 40%, 98%);
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(263.4, 70%, 50.4%);
+  --primary-foreground: hsl(210, 40%, 98%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
   --destructive: hsl(0, 62.8%, 30.6%);
   --destructive-foreground: hsl(210, 40%, 98%);
-  --ring: hsl(221.2, 83.2%, 53.3%);
+  --ring: hsl(263.4, 70%, 50.4%);
+
+  /* Dark mode gradient colors */
+  --gradient-from: hsl(263.4, 70%, 50.4%);
+  --gradient-to: hsl(221.2, 83.2%, 53.3%);
 }
 
 @layer base {
@@ -66,40 +75,60 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
+  /* Enhanced theme classes */
   .primary {
-    color: hsl(221.2, 83.2%, 53.3%);
+    color: var(--primary);
   }
 
   .secondary {
-    color: hsl(215.4, 16.3%, 46.9%);
+    color: var(--secondary-foreground);
   }
 
   .accent {
-    color: hsl(45.4, 93.4%, 47.5%);
+    color: var(--primary);
+  }
+
+  /* Modern gradient backgrounds */
+  .gradient-bg {
+    background: linear-gradient(135deg, var(--gradient-from) 0%, var(--gradient-to) 100%);
+  }
+  
+  .gradient-text {
+    background: linear-gradient(135deg, var(--gradient-from) 0%, var(--gradient-to) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 }
 
 @layer components {
+  /* Enhanced prose styles with better theming */
   .prose {
     @apply max-w-none;
+    color: var(--foreground);
   }
 
   .prose h1 {
-    @apply text-2xl font-bold text-slate-900 mt-8 mb-4;
+    @apply text-3xl font-bold mt-8 mb-4;
+    color: var(--foreground);
   }
 
   .prose h2 {
-    @apply text-xl font-semibold text-slate-900 mt-6 mb-3;
+    @apply text-2xl font-semibold mt-6 mb-3;
+    color: var(--foreground);
   }
 
   .prose h3 {
-    @apply text-lg font-medium text-slate-900 mt-4 mb-2;
+    @apply text-xl font-medium mt-4 mb-2;
+    color: var(--foreground);
   }
 
   .prose p {
-    @apply text-slate-700 mb-4 leading-relaxed;
+    @apply mb-4 leading-relaxed;
+    color: var(--muted-foreground);
   }
 
   .prose ul {
@@ -111,21 +140,57 @@
   }
 
   .prose li {
-    @apply text-slate-700;
+    color: var(--muted-foreground);
   }
 
   .prose strong {
-    @apply font-semibold text-slate-900;
+    @apply font-semibold;
+    color: var(--foreground);
   }
 
   .prose code {
-    @apply bg-slate-100 px-2 py-1 rounded text-sm font-mono;
+    @apply px-2 py-1 rounded text-sm font-mono;
+    background-color: var(--muted);
+    color: var(--foreground);
   }
 
   .prose pre {
-    @apply bg-slate-100 p-4 rounded-lg overflow-x-auto mb-4;
+    @apply p-4 rounded-lg overflow-x-auto mb-4;
+    background-color: var(--muted);
+  }
+
+  /* Modern card styles */
+  .modern-card {
+    @apply rounded-xl border shadow-sm transition-all duration-300;
+    background-color: var(--card);
+    border-color: var(--border);
+  }
+
+  .modern-card:hover {
+    @apply shadow-md;
+    transform: translateY(-2px);
+  }
+
+  /* Enhanced button styles */
+  .btn-gradient {
+    @apply rounded-lg px-6 py-3 font-medium transition-all duration-300;
+    background: linear-gradient(135deg, var(--gradient-from) 0%, var(--gradient-to) 100%);
+    color: var(--primary-foreground);
+    border: none;
+  }
+
+  .btn-gradient:hover {
+    @apply shadow-lg;
+    transform: translateY(-1px);
+    filter: brightness(1.1);
+  }
+
+  /* Modern navigation styles */
+  .nav-modern {
+    @apply backdrop-blur-md border-b;
+    background-color: hsla(var(--background-hsl), 0.8);
+    border-color: var(--border);
   }
 }
 
-/* FontAwesome icons via CDN - add to HTML head */
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+/* Remove FontAwesome import to fix CSS warnings */
