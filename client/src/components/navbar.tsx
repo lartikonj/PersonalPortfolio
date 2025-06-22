@@ -56,42 +56,33 @@ export function Navbar() {
                 </Link>
               );
             })}
-            
-            {/* Pages Dropdown */}
-            {publishedPages.length > 0 && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <span className="cursor-pointer px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 flex items-center gap-1">
-                    Pages
-                    <ChevronDown className="h-4 w-4" />
-                  </span>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="w-48">
-                  {publishedPages.map((page: any) => (
-                    <DropdownMenuItem key={page.id} asChild>
-                      <Link href={`/page/${page.slug}`}>
-                        <span className="cursor-pointer">{page.title}</span>
-                      </Link>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
           </div>
         </div>
         <div className="flex items-center space-x-4">
           <DropdownMenu>
-            <DropdownMenuTrigger className="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-slate-100 hover:bg-slate-800/50 transition-all duration-200">
+            <DropdownMenuTrigger className="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all duration-200">
               More
               <ChevronDown className="ml-1 h-4 w-4" />
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="bg-slate-800 border-slate-700">
-              <DropdownMenuItem asChild className="text-slate-300 hover:text-slate-100 hover:bg-slate-700">
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem asChild>
                 <Link href="/resume">
-                  <i className="fas fa-file-alt mr-2"></i>
-                  View Resume
+                  <span className="cursor-pointer flex items-center">
+                    <i className="fas fa-file-alt mr-2"></i>
+                    View Resume
+                  </span>
                 </Link>
               </DropdownMenuItem>
+              {publishedPages.map((page: any) => (
+                <DropdownMenuItem key={page.id} asChild>
+                  <Link href={`/page/${page.slug}`}>
+                    <span className="cursor-pointer flex items-center">
+                      <i className="fas fa-file-text mr-2"></i>
+                      {page.title}
+                    </span>
+                  </Link>
+                </DropdownMenuItem>
+              ))}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
