@@ -24,8 +24,8 @@ export function ProjectCard({ project }: ProjectCardProps) {
   };
 
   return (
-    <div className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-slate-200">
-      <div className="aspect-video bg-slate-100 overflow-hidden">
+    <div className="group bg-white dark:bg-slate-800 rounded-xl shadow-md hover:shadow-xl dark:shadow-slate-900/20 transition-all duration-300 overflow-hidden border border-slate-200 dark:border-slate-700">
+      <div className="aspect-video bg-slate-100 dark:bg-slate-700 overflow-hidden">
         <img 
           src={thumbnailImage}
           alt={project.title}
@@ -33,10 +33,10 @@ export function ProjectCard({ project }: ProjectCardProps) {
         />
       </div>
       <div className="p-6">
-        <h3 className="text-xl font-semibold text-slate-900 mb-2">{project.title}</h3>
-        <p className="text-secondary mb-4">{getDisplayDescription()}</p>
+        <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">{project.title}</h3>
+        <p className="text-slate-600 dark:text-slate-300 mb-4">{getDisplayDescription()}</p>
         <Link href={`/project/${project.id}`}>
-          <a className="text-primary font-semibold hover:text-blue-700 transition-colors inline-flex items-center gap-1">
+          <a className="text-primary font-semibold hover:text-blue-700 dark:hover:text-blue-400 transition-colors inline-flex items-center gap-1">
             View Project <i className="fas fa-arrow-right text-sm"></i>
           </a>
         </Link>
