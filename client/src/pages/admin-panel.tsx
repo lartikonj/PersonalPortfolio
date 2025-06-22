@@ -227,19 +227,19 @@ function AdminContent() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <section className="py-12 bg-slate-50 min-h-screen">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
+      <section className="py-12 bg-slate-50 dark:bg-slate-900 min-h-screen">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Admin Header */}
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">Admin Panel</h1>
-              <p className="text-lg text-secondary">Manage your portfolio content</p>
+              <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-slate-100 mb-2">Admin Panel</h1>
+              <p className="text-lg text-slate-600 dark:text-slate-300">Manage your portfolio content</p>
             </div>
             <div className="flex items-center gap-4">
               <div className="text-right">
-                <p className="text-sm font-medium text-slate-900">Welcome, {username}</p>
-                <p className="text-xs text-secondary">Authenticated Session</p>
+                <p className="text-sm font-medium text-slate-900 dark:text-slate-100">Welcome, {username}</p>
+                <p className="text-xs text-slate-600 dark:text-slate-300">Authenticated Session</p>
               </div>
               <Button
                 variant="outline"
@@ -656,10 +656,10 @@ export default function AdminPanel() {
   // Show loading screen
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-lg font-medium text-slate-600">Loading...</p>
+          <p className="text-lg font-medium text-slate-600 dark:text-slate-300">Loading...</p>
         </div>
       </div>
     );

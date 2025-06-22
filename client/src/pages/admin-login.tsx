@@ -59,11 +59,11 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold text-slate-900">Admin Login</CardTitle>
-          <p className="text-secondary">Enter your credentials to access the admin panel</p>
+          <CardTitle className="text-2xl font-bold text-slate-900 dark:text-slate-100">Admin Login</CardTitle>
+          <p className="text-slate-600 dark:text-slate-300">Enter your credentials to access the admin panel</p>
         </CardHeader>
         <CardContent>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
@@ -95,7 +95,7 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   <i className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
@@ -127,8 +127,8 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
             </Button>
           </form>
 
-          <div className="mt-6 pt-4 border-t border-slate-200">
-            <div className="flex items-center gap-2 text-sm text-slate-500">
+          <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-700">
+            <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
               <i className="fas fa-shield-alt"></i>
               <span>Secure admin authentication</span>
             </div>
