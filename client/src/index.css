@@ -43,29 +43,41 @@
 }
 
 .dark {
-  --background: hsl(240, 10%, 3.9%);
-  --foreground: hsl(0, 0%, 98%);
-  --muted: hsl(240, 3.7%, 15.9%);
-  --muted-foreground: hsl(240, 5%, 64.9%);
-  --popover: hsl(240, 10%, 3.9%);
-  --popover-foreground: hsl(0, 0%, 98%);
-  --card: hsl(240, 10%, 3.9%);
-  --card-foreground: hsl(0, 0%, 98%);
-  --border: hsl(240, 3.7%, 15.9%);
-  --input: hsl(240, 3.7%, 15.9%);
-  --primary: hsl(263.4, 70%, 50.4%);
-  --primary-foreground: hsl(210, 40%, 98%);
-  --secondary: hsl(240, 3.7%, 15.9%);
-  --secondary-foreground: hsl(0, 0%, 98%);
-  --accent: hsl(240, 3.7%, 15.9%);
-  --accent-foreground: hsl(0, 0%, 98%);
+  --background: hsl(222.2, 84%, 4.9%);
+  --foreground: hsl(210, 40%, 98%);
+  --muted: hsl(217.2, 32.6%, 17.5%);
+  --muted-foreground: hsl(215, 20.2%, 65.1%);
+  --popover: hsl(222.2, 84%, 4.9%);
+  --popover-foreground: hsl(210, 40%, 98%);
+  --card: hsl(222.2, 84%, 4.9%);
+  --card-foreground: hsl(210, 40%, 98%);
+  --border: hsl(217.2, 32.6%, 17.5%);
+  --input: hsl(217.2, 32.6%, 17.5%);
+  --primary: hsl(217.2, 91.2%, 59.8%);
+  --primary-foreground: hsl(222.2, 84%, 4.9%);
+  --secondary: hsl(217.2, 32.6%, 17.5%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  --accent: hsl(217.2, 32.6%, 17.5%);
+  --accent-foreground: hsl(210, 40%, 98%);
   --destructive: hsl(0, 62.8%, 30.6%);
   --destructive-foreground: hsl(210, 40%, 98%);
-  --ring: hsl(263.4, 70%, 50.4%);
+  --ring: hsl(217.2, 91.2%, 59.8%);
 
   /* Dark mode gradient colors */
-  --gradient-from: hsl(263.4, 70%, 50.4%);
-  --gradient-to: hsl(221.2, 83.2%, 53.3%);
+  --gradient-from: hsl(217.2, 91.2%, 59.8%);
+  --gradient-to: hsl(263.4, 70%, 50.4%);
+
+  /* Custom slate colors for dark mode */
+  --slate-50: hsl(222.2, 84%, 4.9%);
+  --slate-100: hsl(217.2, 32.6%, 17.5%);
+  --slate-200: hsl(215.3, 25%, 26.7%);
+  --slate-300: hsl(215.4, 16.3%, 46.9%);
+  --slate-400: hsl(215.4, 16.3%, 56.9%);
+  --slate-500: hsl(212.7, 26.8%, 63.9%);
+  --slate-600: hsl(210, 40%, 78%);
+  --slate-700: hsl(210, 40%, 88%);
+  --slate-800: hsl(210, 40%, 93%);
+  --slate-900: hsl(210, 40%, 98%);
 }
 
 @layer base {
@@ -167,8 +179,13 @@
   }
 
   .modern-card:hover {
-    @apply shadow-md;
+    @apply shadow-lg;
     transform: translateY(-2px);
+    box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  .dark .modern-card:hover {
+    box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
   }
 
   /* Enhanced button styles */
@@ -188,8 +205,12 @@
   /* Modern navigation styles */
   .nav-modern {
     @apply backdrop-blur-md border-b;
-    background-color: hsla(var(--background-hsl), 0.8);
+    background-color: rgba(255, 255, 255, 0.8);
     border-color: var(--border);
+  }
+
+  .dark .nav-modern {
+    background-color: rgba(15, 23, 42, 0.8);
   }
 }
 
