@@ -8,6 +8,12 @@ export default function Home() {
     queryKey: ["/api/projects"],
   });
 
+  const { data: settings } = useQuery({
+    queryKey: ["/api/settings"],
+  });
+
+  const siteName = settings?.find((s: any) => s.key === "site_name")?.value || "Developer";
+
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       {/* Hero Section */}
@@ -15,7 +21,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              Hi, I'm <span className="text-blue-500">John Doe</span>
+              Hi, I'm <span className="text-blue-500">{siteName}</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-400 mb-8 max-w-3xl mx-auto">
               Full Stack Developer & UI/UX Designer passionate about creating beautiful, functional web experiences
