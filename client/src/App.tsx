@@ -12,21 +12,6 @@ import AdminPanel from "@/pages/admin-panel";
 import NotFound from "@/pages/not-found";
 import { useEffect } from "react";
 
-function Router() {
-  return (
-    <div className="min-h-screen bg-background transition-colors duration-300">
-      <Navbar />
-      <Switch>
-        <Route path="/" component={Home} />
-        <Route path="/resume" component={Resume} />
-        <Route path="/project/:id" component={ProjectDetail} />
-        <Route path="/admin" component={AdminPanel} />
-        <Route component={NotFound} />
-      </Switch>
-    </div>
-  );
-}
-
 function App() {
   // Force dark mode permanently
   useEffect(() => {
@@ -37,19 +22,17 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Router>
-          <div className="min-h-screen bg-background text-foreground">
-            <Navbar />
-            <Switch>
-              <Route path="/" component={Home} />
-              <Route path="/resume" component={Resume} />
-              <Route path="/admin" component={AdminPanel} />
-              <Route path="/project/:id" component={ProjectDetail} />
-              <Route path="/page/:slug" component={PageDetail} />
-              <Route component={NotFound} />
-            </Switch>
-          </div>
-        </Router>
+        <div className="min-h-screen bg-background text-foreground">
+          <Navbar />
+          <Switch>
+            <Route path="/" component={Home} />
+            <Route path="/resume" component={Resume} />
+            <Route path="/admin" component={AdminPanel} />
+            <Route path="/project/:id" component={ProjectDetail} />
+            <Route path="/page/:slug" component={PageDetail} />
+            <Route component={NotFound} />
+          </Switch>
+        </div>
         <Toaster />
       </TooltipProvider>
     </QueryClientProvider>
