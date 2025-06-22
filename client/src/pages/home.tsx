@@ -8,10 +8,6 @@ export default function Home() {
     queryKey: ["/api/projects"],
   });
 
-  const scrollToProjects = () => {
-    document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       {/* Hero Section */}
@@ -24,20 +20,12 @@ export default function Home() {
             <p className="text-xl md:text-2xl text-gray-400 mb-8 max-w-3xl mx-auto">
               Full Stack Developer & UI/UX Designer passionate about creating beautiful, functional web experiences
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/resume">
-                <a className="btn-gradient inline-flex items-center px-8 py-4 rounded-lg font-medium transition-all duration-300 hover:shadow-lg hover:-translate-y-1 tech-glow">
-                  <i className="fas fa-file-alt mr-2"></i>
-                  View Resume
-                </a>
-              </Link>
-              <button 
-                onClick={scrollToProjects}
-                className="inline-flex items-center px-8 py-4 rounded-lg font-medium border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 tech-border"
-              >
-                <i className="fas fa-folder-open mr-2"></i>
-                See My Work
-              </button>
+            <div className="flex justify-center">
+              <div className="text-center">
+                <p className="text-gray-400 text-lg">
+                  Scroll down to explore my projects and work
+                </p>
+              </div>
             </div>
           </div>
         </div>

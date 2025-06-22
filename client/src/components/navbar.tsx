@@ -1,11 +1,17 @@
 import { Link, useLocation } from "wouter";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ChevronDown } from "lucide-react";
 
 export function Navbar() {
   const [location] = useLocation();
 
   const navItems = [
     { path: "/", label: "Home" },
-    { path: "/resume", label: "Resume" },
     { path: "/admin", label: "Admin" },
   ];
 
@@ -41,7 +47,20 @@ export function Navbar() {
           </div>
         </div>
         <div className="flex items-center space-x-4">
-          {/* Theme toggle removed - using permanent dark theme */}
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-slate-100 hover:bg-slate-800/50 transition-all duration-200">
+              More
+              <ChevronDown className="ml-1 h-4 w-4" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="bg-slate-800 border-slate-700">
+              <DropdownMenuItem asChild className="text-slate-300 hover:text-slate-100 hover:bg-slate-700">
+                <Link href="/resume">
+                  <i className="fas fa-file-alt mr-2"></i>
+                  View Resume
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </nav>
