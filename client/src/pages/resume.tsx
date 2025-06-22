@@ -62,7 +62,7 @@ export default function Resume() {
                     <p className="text-sm text-gray-400 mt-2">Resume URL can be configured in the admin panel</p>
                   </div>
                 </div>
-              )}</div>
+              )}
             </div>
           </div>
         </div>
