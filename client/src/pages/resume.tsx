@@ -9,12 +9,6 @@ export default function Resume() {
     queryKey: ["/api/resume"],
   });
 
-  const handleDownload = () => {
-    if (resumeData?.resumeUrl) {
-      window.open(resumeData.resumeUrl, '_blank');
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gray-900">
       <section className="py-12 bg-gray-900 min-h-screen">
@@ -26,19 +20,6 @@ export default function Resume() {
 
           {/* Resume Viewer */}
           <div className="bg-gray-800 rounded-xl shadow-lg border border-gray-700 overflow-hidden">
-            <div className="p-6 border-b border-gray-700 flex justify-between items-center">
-              <h2 className="text-xl font-semibold text-white">John_Doe_Resume.pdf</h2>
-              {resumeData?.resumeUrl && (
-                <button 
-                  onClick={handleDownload}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors inline-flex items-center gap-2 tech-glow"
-                >
-                  <i className="fas fa-download"></i>
-                  Download PDF
-                </button>
-              )}
-            </div>
-            
             {/* PDF Viewer Container */}
             <div className="relative bg-gray-700" style={{ height: "800px" }}>
               {isLoading ? (
@@ -51,7 +32,7 @@ export default function Resume() {
               ) : resumeData?.resumeUrl ? (
                 <iframe 
                   src={resumeData.resumeUrl}
-                  className="w-full h-full border-0 rounded-b-xl"
+                  className="w-full h-full border-0 rounded-xl"
                   title="Resume PDF"
                 />
               ) : (
