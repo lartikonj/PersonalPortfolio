@@ -24,7 +24,6 @@ export function Navbar() {
 
   const navItems = [
     { path: "/", label: "Home" },
-    { path: "/admin", label: "Admin" },
   ];
 
   return (
