@@ -278,7 +278,7 @@ function AdminContent() {
                   </CardTitle>
                   {editingProject && (
                     <p className="text-sm text-secondary">
-                      Editing project created on {new Date(editingProject.createdAt).toLocaleDateString()}
+                      Editing project modified on {new Date(editingProject.createdAt).toLocaleDateString()}
                     </p>
                   )}
                 </CardHeader>
@@ -530,7 +530,7 @@ Describe your project here...
                             <div className="flex-1">
                               <h3 className="font-medium text-slate-900 mb-1">{project.title}</h3>
                               <p className="text-sm text-secondary mb-2">
-                                Created: {new Date(project.createdAt).toLocaleDateString()}
+                                Modified: {new Date(project.createdAt).toLocaleDateString()}
                               </p>
                               <div className="flex gap-2">
                                 <span className="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded">
