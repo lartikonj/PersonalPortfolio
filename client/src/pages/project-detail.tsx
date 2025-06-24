@@ -80,7 +80,7 @@ export default function ProjectDetail() {
               <p className="text-lg text-slate-300 mb-4 leading-relaxed">{project.description}</p>
             )}
             <p className="text-sm text-slate-400">
-              Modified: {new Date(project.createdAt).toLocaleDateString('en-US', { 
+              Last updated: {new Date(project.createdAt).toLocaleDateString('en-US', { 
                 year: 'numeric', 
                 month: 'long', 
                 day: 'numeric' 
