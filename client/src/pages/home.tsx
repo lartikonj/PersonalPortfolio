@@ -13,6 +13,7 @@ export default function Home() {
   });
 
   const siteName = settings?.find((s: any) => s.key === "site_name")?.value || "Developer";
+  const heroTagline = settings?.find((s: any) => s.key === "hero_tagline")?.value || "Full Stack Developer & UI/UX Designer passionate about creating beautiful, functional web experiences";
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -24,7 +25,7 @@ export default function Home() {
               Hi, I'm <span className="text-blue-500">{siteName}</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-400 mb-8 max-w-3xl mx-auto">
-              Full Stack Developer & UI/UX Designer passionate about creating beautiful, functional web experiences
+              {heroTagline}
             </p>
             <div className="flex justify-center">
               <div className="text-center">
